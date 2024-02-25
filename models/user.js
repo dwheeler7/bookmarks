@@ -27,9 +27,10 @@ const userSchema = new mongoose.Schema({
 userSchema.pre('save', async function(next) {
     if (this.isModified('password')) {
         // validate password
-        const passVal = passwordSchema.validate(this.password, { details: true })
-        if (passVal !== true) {
-            throw new Error(passVal)
+        const passVal = passwordSchema.validate(this.password, { list: true })
+        if (passVal.length) {
+            console.log(passVal)
+            throw new Error((passVal))
         }
         this.password = await bcrypt.hash(this.password, 8) // encrypt      
     }
