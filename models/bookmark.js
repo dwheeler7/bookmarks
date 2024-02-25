@@ -6,6 +6,7 @@ const bookmarkSchema = new Schema ({
     url: { 
         required: true, 
         type: String,
+        user: { type: Schema.Types.ObjectId, ref: 'User'},
         validate: {
             validator: function(v) {
                 return /^(http|https):\/\//.test(v)
