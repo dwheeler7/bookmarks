@@ -1,0 +1,12 @@
+.nav {
+    width: 100%;
+    background: grey;  
+}
+
+.nav__wrap {
+    max-width: 600px;    
+    display: flex;
+    justify-content: space-between;
+    margin: auto;
+    padding: 25px;  
+}

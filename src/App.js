@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
-import AuthPage from './pages/AuthPage/AuthPage'
+import { Route, Routes } from 'react-router-dom'
+import SignUpPage from './pages/SignUpPage/SignUpPage'
 import HomePage from './pages/HomePage/HomePage'
 import AddBookmarkPage from './pages/AddBookmarkPage/AddBookmarkPage'
-import { Route, Routes } from 'react-router-dom'
 import styles from './App.module.scss'
+import Nav from './components/Nav/Nav'
 
 export default function App(){
     // user state
@@ -118,9 +119,9 @@ export default function App(){
 
     return (
         <div className={styles.App}>
+            <Nav />
 
-            <Routes>
-                // Homepage route
+            <Routes>                
                 <Route path='/'
                 element={
                     <HomePage 
@@ -131,20 +132,18 @@ export default function App(){
                         getAllBookmarks={getAllBookmarks} 
                         updateBookmark={updateBookmark}
                     />}>
-                </Route>
-
-                // Authpage route
-                <Route path='/register'
+                </Route>                
+                
+                <Route path='/sign-up'
                 element={
-                    <AuthPage 
+                    <SignUpPage 
                         setUser={setUser}
                         setToken={setToken}
                         signUp={signUp}
                         login={login}
                     />
                 }></Route>
-
-                // New bookmark route
+                
                 <Route path='/new'
                 element={
                     <AddBookmarkPage
