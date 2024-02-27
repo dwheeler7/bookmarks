@@ -2,17 +2,17 @@ require('dotenv').config()
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const passwordValidator = require('password-validator');
+// const passwordValidator = require('password-validator');
 
-const passwordSchema = new passwordValidator()
-passwordSchema
-.is().min(8)                                    // Minimum length 8
-.is().max(100)                                  // Maximum length 100
-.has().uppercase()                              // Must have uppercase letters
-.has().lowercase()                              // Must have lowercase letters
-.has().digits(2)                                // Must have at least 2 digits
-.has().not().spaces()                           // Should not have spaces
-.is().not().oneOf(['Passw0rd', 'Password123']) // Blacklist these values
+// const passwordSchema = new passwordValidator()
+// passwordSchema
+// .is().min(8)                                    // Minimum length 8
+// .is().max(100)                                  // Maximum length 100
+// .has().uppercase()                              // Must have uppercase letters
+// .has().lowercase()                              // Must have lowercase letters
+// .has().digits(2)                                // Must have at least 2 digits
+// .has().not().spaces()                           // Should not have spaces
+// .is().not().oneOf(['Passw0rd', 'Password123']) // Blacklist these values
 
 const userSchema = new mongoose.Schema({
     firstName: {type: String, required: true},
@@ -27,11 +27,11 @@ const userSchema = new mongoose.Schema({
 userSchema.pre('save', async function(next) {
     if (this.isModified('password')) {
         // validate password
-        const passVal = passwordSchema.validate(this.password, { list: true })
-        if (passVal.length) {
-            console.log(passVal)
-            throw new Error((passVal))
-        }
+        // const passVal = passwordSchema.validate(this.password, { list: true })
+        // if (passVal.length) {
+        //     console.log(passVal)
+        //     throw new Error((passVal))
+        // }
         this.password = await bcrypt.hash(this.password, 8) // encrypt      
     }
     next()
