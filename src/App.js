@@ -12,18 +12,109 @@ export default function App(){
     const [token, setToken] = useState('')
 
     // sign up 
-
-
+    const signUp = async (credentials) => {
+        try {
+            const response = await fetch('/api/users', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(credentials)
+            })
+            const data = await response.json()
+            setUser(data.user)
+            setToken(data.token)
+            localStorage.setItem('token', data.token)
+            localStorage.setItem('user', JSON.stringify(data.user))
+        } catch (err) {
+            console.error(err) 
+        }
+    }
 
     // login
+    const login = async (credentials) => {
+
+        try {
+            const response = await fetch('/api/users/login', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(credentials)
+            })
+            const data = await response.json()
+            setUser(data.user)
+            setToken(data.token)
+            localStorage.setItem('token', data.token)
+            localStorage.setItem('user', JSON.stringify(data.user))            
+        } catch (err) {
+            console.error(err) 
+        }
+
+    }
 
     // create bookmark
+    const createBookmark = async (bookmarkData, token) => {
+        if (!token) return
+        try {
+            const response = await fetch('/api/bookmarks', {        
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(bookmarkData)
+            })
+            const data = await response.json()
+            return data
+        } catch (err) {
+            console.error(err) 
+        }
+    }
 
     // get all bookmarks
+    const getAllBookmarks = async () => {
+        try {
+            const response = await fetch('/api/bookmarks')
+            const data = await response.json()
+            return data
+        } catch (err) {
+            console.error(err) 
+        }
+    }
 
     // update bookmark
+    const updateBookmark = async (bookmarkData, id, token) => {
+        if (!token) return
+        try {
+            const response = await fetch(`/api/bookmarks/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(bookmarkData)
+            })
+            const data = await response.json()
+            return data
+        } catch(err) {
+            console.error(err)
+        }
+    }
 
     // delete bookmark
+    const deleteBookmark = async (id, token) => {
+        if (!token) return
+        try {
+            const response = await fetch(`/api/bookmarks/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            const data = await response.json()
+            return data
+        } catch(err) {
+            console.error(err)
+        }
+    }
 
     return (
         <div className={styles.App}>
@@ -38,6 +129,7 @@ export default function App(){
                         setToken={setToken}
                         setUser={setUser}
                         getAllBookmarks={getAllBookmarks} 
+                        updateBookmark={updateBookmark}
                     />}>
                 </Route>
 
@@ -61,12 +153,8 @@ export default function App(){
                         setToken={setToken}
                         setUser={setUser}
                         createBookmark={createBookmark}
-                />}></Route>
-            
+                />}></Route>            
             </Routes>
-
-
         </div>
     )
-
 }
