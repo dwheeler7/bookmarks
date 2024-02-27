@@ -17,8 +17,6 @@ exports.auth = async (req, res, next) => {
     }
 }
 
-// router.delete('/:id', userController.auth, userController.deleteUser)
-
 exports.createUser = async (req, res) => {
     try {
         const user = new User(req.body)
@@ -44,8 +42,6 @@ exports.loginUser = async (req, res) => {
         res.status(400).json({message: err.message})
     }
 }
-
-// router.put('/:id', userController.updateUser)
 
 exports.updateUser = async (req, res) => {
     try {
