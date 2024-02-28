@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import SignUpPage from './pages/SignUpPage/SignUpPage'
+import LoginPage from './pages/LoginPage/LoginPage'
 import HomePage from './pages/HomePage/HomePage'
 import AddBookmarkPage from './pages/AddBookmarkPage/AddBookmarkPage'
 import styles from './App.module.scss'
@@ -70,9 +71,14 @@ export default function App(){
     }
 
     // get all bookmarks
-    const getAllBookmarks = async () => {
+    const getAllBookmarks = async (userId, token) => {
         try {
-            const response = await fetch('/api/bookmarks')
+            const response = await fetch(`/api/bookmarks/${userId}/bookmarks`, {                
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            })
             const data = await response.json()
             return data
         } catch (err) {
@@ -129,8 +135,10 @@ export default function App(){
                         token={token}
                         setToken={setToken}
                         setUser={setUser}
+                        login={login}
                         getAllBookmarks={getAllBookmarks} 
                         updateBookmark={updateBookmark}
+                        createBookmark={createBookmark}
                     />}>
                 </Route>                
                 
@@ -139,20 +147,18 @@ export default function App(){
                     <SignUpPage 
                         setUser={setUser}
                         setToken={setToken}
-                        signUp={signUp}
-                        login={login}
+                        signUp={signUp}                        
                     />
                 }></Route>
-                
-                <Route path='/new'
+
+                <Route path='/login'
                 element={
-                    <AddBookmarkPage
-                        user={user} 
-                        token={token} 
-                        setToken={setToken}
+                    <LoginPage 
                         setUser={setUser}
-                        createBookmark={createBookmark}
-                />}></Route>            
+                        setToken={setToken}                        
+                        login={login}
+                    />
+                }></Route>                                  
             </Routes>
         </div>
     )

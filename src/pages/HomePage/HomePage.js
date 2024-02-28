@@ -1,33 +1,31 @@
 import { useState, useEffect } from 'react'
+import LoginForm from "../../components/LoginForm/LoginForm"
+import CreateBookmarkForm from "../../components/CreateBookmarkForm/CreateBookmarkForm"
 import Container from '../../components/Container/Container'
 
-// homepage will:
-    // show list of bookmarks
-    // 
-
-export default function HomePage (props) { 
+const HomePage = props => { 
     
-    const [bookmarks, setBookmarks] = useState([])
+    const [bookmarks, setBookmarks] = useState([])    
 
     useEffect(() => {
         const fetchBookmarks = async () => {
             try {
-                const data = await props.getAllBookmarks()
+                const data = await props.getAllBookmarks(props.user._id, props.token)
                 setBookmarks(data)
             } catch(err) {
                 console.error(err)
             }
         }
-        fetchBookmarks()
+        // fetchBookmarks()
     }, [])
-
-
 
     return (        
         <>
         <Container>
-            {bookmarks.length? <p>{bookmarks[0].title}</p> : '...' }            
+            { props.user? <CreateBookmarkForm createBookmark={props.createBookmark} token={props.token} /> : <LoginForm login={props.login}/> }            
         </Container>
         </>
     )
 }
+
+export default HomePage

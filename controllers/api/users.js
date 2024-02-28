@@ -1,5 +1,6 @@
 require('dotenv').config()
 const User = require('../../models/user')
+const Bookmark = require('../../models/bookmark')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
@@ -57,9 +58,20 @@ exports.updateUser = async (req, res) => {
 
 exports.deleteUser = async (req, res) => {
     try{
-      await req.user.deleteOne()
-      res.json({ message: 'User deleted' })
-    }catch(err){
-      res.status(400).json({message: err.message})
+        await req.user.deleteOne()
+        res.json({ message: 'User deleted' })
+    } catch(err) {
+        res.status(400).json({message: err.message})
     }
-  }
+}
+
+exports.indexBookmarks = async (req, res, next) => {
+    try {
+        const foundUser = await User.findOne({ _id: req.params.id }).populate('bookmarks').sort('bookmarks.createdAt').exec()
+        const bookmarks =  foundUser.bookmarks
+        res.locals.data.bookmarks = bookmarks
+        next()
+    } catch (err) {
+        res.status(400).json({message: err.message})
+    }
+}
